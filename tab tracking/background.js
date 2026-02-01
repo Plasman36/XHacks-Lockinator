@@ -22,17 +22,17 @@ function isBlack(url) {
 // Updates the list of open tabs and sends alerts
 function update() {
     chrome.tabs.query({}, (tabs) => {
-        openTabs = {}; // resets list
+        openTabs = {}; // resets list to empty
         tabs.forEach(tab => {
             if(!tab.url) return;
             openTabs[tab.id] = { 
-                title: tab.title, 
+                title: tab.title, // adds tabs to list
                 url: tab.url 
             };
 
             const key = `${tab.id}:${tab.url}`;
 
-            // Alerts once per tab 
+            // Alerts once per tab if on the blacklist
             if (isBlack(tab.url) && !alertTabs.has(key)) {
                 alertTabs.add(key);
                 chrome.notifications.create({
