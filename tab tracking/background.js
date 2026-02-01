@@ -32,25 +32,6 @@ function update() {
             if (isBlack(tab.url) && !alertTabs.has(key)) {
                 alertTabs.add(key);
 
-                // Start badge countdown
-                let timeLeft = 3;
-                chrome.action.setBadgeBackgroundColor({ color: '#0000FF' }); // blue badge
-                chrome.action.setBadgeText({ text: String(timeLeft) });
-
-                const countdown = setInterval(() => {
-                    timeLeft--;
-                    if (timeLeft > 0) {
-                        chrome.action.setBadgeText({ text: String(timeLeft) });
-                    } else {
-                        chrome.action.setBadgeText({ text: '💥' }); // final "Get Slapped!"
-                        clearInterval(countdown);
-                        setTimeout(() => chrome.action.setBadgeText({ text: '' }), 1000); // clear badge
-                    }
-                }, 1000);
-
-                // Send message to content script to start in-page timer
-                chrome.tabs.sendMessage(tab.id, { action: "startTimer" });
-
                 // Notification
                 chrome.notifications.create({
                     type: "basic",
