@@ -12,47 +12,44 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    // Initialize timer immediately so it’s visible
-    let timeLeft = 3;  
-    timerEl.textContent = `Slap in ${timeLeft}...`;
-    timerEl.style.display = "block";   
-    timerEl.style.fontSize = "24px";   
-    timerEl.style.fontWeight = "bold";
-
-    // Directly query current tabs
-    chrome.tabs.query({}, (tabs) => {
+    chrome.storage.local.get("openTabs", (data) => {
+        const tabs = data.openTabs || {};
         let hasBadTab = false;
 
-        tabs.forEach(tab => {
-            if (tab.url && BLACKLIST.some(domain => tab.url.includes(domain))) {
+        for (const id in tabs) {
+            const { title, url } = tabs[id];
+            if (url && BLACKLIST.some(domain => url.includes(domain))) {
                 hasBadTab = true;
 
                 const li = document.createElement("li");
-                li.textContent = `${tab.title} (${tab.url})`;
+                li.textContent = `${title} (${url})`;
                 list.appendChild(li);
             }
-        });
+        }
 
         if (!hasBadTab) {
-            window.close();
+            // tiny delay to avoid closing before render
+            setTimeout(() => window.close(), 100);
             return;
         }
 
-        startCountdown(timerEl, timeLeft);
+        // Start countdown
+        let timeLeft = 3;
+        timerEl.textContent = `Slap in ${timeLeft}...`;
+        timerEl.style.display = "block";
+        timerEl.style.fontSize = "24px";
+        timerEl.style.fontWeight = "bold";
+
+        const countdown = setInterval(() => {
+            timeLeft--;
+            if (timeLeft > 0) {
+                timerEl.textContent = `Slap in ${timeLeft}...`;
+            } else {
+                clearInterval(countdown);
+                timerEl.textContent = "Get Slapped!";
+                timerEl.style.color = "red";
+                setTimeout(() => window.close(), 500);
+            }
+        }, 1000);
     });
 });
-
-function startCountdown(timerEl, timeLeft) {
-    const countdown = setInterval(() => {
-        timeLeft--;
-
-        if (timeLeft > 0) {
-            timerEl.textContent = `Slap in ${timeLeft}...`;
-        } else {
-            clearInterval(countdown);
-            timerEl.textContent = "Get Slapped!";
-            timerEl.style.color = "red";
-            setTimeout(() => window.close(), 500);
-        }
-    }, 1000);
-}
