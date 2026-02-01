@@ -37,3 +37,5 @@ if __name__ == "__main__":
             workApp = False
             print("no no app")
         time.sleep(5)  # Check every 5 seconds
+
+    # Send signal that an blacklisted app was detected
