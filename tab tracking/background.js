@@ -1,4 +1,4 @@
-const BLACKLIST = ["instagram.com"];
+const BLACKLIST = ["instagram.com", "krunker.io"];
 
 // Tracks open tabs and already flagged tabs
 let openTabs = {};

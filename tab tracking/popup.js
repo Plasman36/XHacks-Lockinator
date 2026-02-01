@@ -1,6 +1,6 @@
 console.log("This is a popup!");
 
-const BLACKLIST = ["instagram.com"];
+const BLACKLIST = ["instagram.com", "krunker.io"];
 
 document.addEventListener("DOMContentLoaded", () => {
     const list = document.getElementById("tabs");
