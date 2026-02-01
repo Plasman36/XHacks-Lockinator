@@ -32,6 +32,13 @@ function update() {
             if (isBlack(tab.url) && !alertTabs.has(key)) {
                 alertTabs.add(key);
 
+                chrome.storage.local.set({ badTab: true }); // boolean for trigger
+                chrome.storage.local.get("badTab", (data) => {
+                if (data.badTab) {
+                // do smth
+                }
+            });
+
                 // Notification
                 chrome.notifications.create({
                     type: "basic",
@@ -40,6 +47,7 @@ function update() {
                     message: `Tab open: ${tab.title}\n${tab.url}`
                 });
             }
+            chrome.storage.local.set({ badTabTriggered: false }); // resets trigger to false to turn off signal
         });
 
         // Saves the current tabs
