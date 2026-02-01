@@ -7,21 +7,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const timerEl = document.getElementById("timer");
     const list = document.getElementById("tabs");
 
-    chrome.storage.local.get("openTabs", (data) => {
-        const tabs = data.openTabs || {};
+    // --- Changed this part: use chrome.tabs.query directly instead of storage ---
+    chrome.tabs.query({}, (tabs) => {
         let hasBadTab = false;
 
-        for (const id in tabs) {
-            const { title, url } = tabs[id];
-
-            if (url && BLACKLIST.some(domain => url.includes(domain))) {
+        tabs.forEach(tab => {
+            if (tab.url && BLACKLIST.some(domain => tab.url.includes(domain))) {
                 hasBadTab = true;
 
                 const li = document.createElement("li");
-                li.textContent = `${title} (${url})`;
+                li.textContent = `${tab.title} (${tab.url})`;
                 list.appendChild(li);
             }
-        }
+        });
 
         // Only show popup if there are blacklisted tabs
         if (!hasBadTab) {
