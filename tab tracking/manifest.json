@@ -1,0 +1,20 @@
+{
+    "control_version": 3,
+    "name": "Lockinator", 
+    "version": "1.0", 
+    "description": "Alerts when blaclisted tabs are open and logs tabs.",
+    "permissions": [
+        "tabs",
+        "storage",
+        "notifications"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icon.png"
+        }
+    }
+}
