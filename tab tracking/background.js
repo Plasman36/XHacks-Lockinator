@@ -37,7 +37,7 @@ function update() {
                 alertTabs.add(key);
                 chrome.notifications.create({
                     type: "basic",
-                    iconUrl: "icon.png",
+                    iconUrl: "icon-16.png",
                     title: "Bad Tab!",
                     message: `Tab open: ${tab.title}\n${tab.url}`
                 });
