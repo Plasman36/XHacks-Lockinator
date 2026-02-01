@@ -7,7 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const timerEl = document.getElementById("timer");
     const list = document.getElementById("tabs");
 
-    // --- Changed this part: use chrome.tabs.query directly instead of storage ---
+    // Ensure the element exists
+    if (!timerEl || !list) {
+        console.error("Timer or tabs element not found!");
+        return;
+    }
+
+    // Directly query current tabs
     chrome.tabs.query({}, (tabs) => {
         let hasBadTab = false;
 
@@ -21,20 +27,22 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Only show popup if there are blacklisted tabs
         if (!hasBadTab) {
             window.close();
             return;
         }
 
-        // Start countdown now that popup is visible
+        // Initialize timer display immediately
+        timerEl.textContent = `Slap in ${timeLeft}...`;
+        timerEl.style.display = "block";   // Ensure it’s visible
+        timerEl.style.fontSize = "24px";   // Optional: make it bigger
+        timerEl.style.fontWeight = "bold"; // Optional: bold
+
         startCountdown(timerEl);
     });
 });
 
 function startCountdown(timerEl) {
-    timerEl.textContent = `Slap in ${timeLeft}...`;
-
     const countdown = setInterval(() => {
         timeLeft--;
 
@@ -44,7 +52,7 @@ function startCountdown(timerEl) {
             clearInterval(countdown);
             timerEl.textContent = "Get Slapped!";
             timerEl.style.color = "red";
-            // small delay so user sees the message
+            // Small delay to show final message
             setTimeout(() => window.close(), 500);
         }
     }, 1000);
