@@ -27,13 +27,29 @@ def get_active_window():
         'pid': pid
     }
 
+def load_blacklist(filename="blacklist.txt"):
+    #Load blacklisted apps from file and add .exe extension
+    try:
+        with open(filename, 'r') as f:
+            # Read lines, strip whitespace, add .exe, ignore empty lines
+            apps = [line.strip() + ".exe" for line in f if line.strip()]
+        return apps
+    except FileNotFoundError:
+        print(f"Warning: {filename} not found. Using empty blacklist.")
+        return []
+
 if __name__ == "__main__":
     
     workApp = True
     while workApp:
+        blacklist = load_blacklist()
         app_info = get_active_window()
         print(f"App: {app_info['process']}, Title: {app_info['title']}")
-        if app_info['process'].lower() == 'notepad.exe':
+        currentApp = app_info['process']
+        if currentApp in blacklist:
+            print("Blacklisted app detected!")
             workApp = False
-            print("no no app")
+
         time.sleep(5)  # Check every 5 seconds
+
+    # Send signal that an blacklisted app was detected
