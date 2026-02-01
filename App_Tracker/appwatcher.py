@@ -8,7 +8,6 @@ import serial
 arduino = serial.Serial('COM7', 9600)
 last_state = None
 
-# Code from Claude.ai
 def get_active_window():
     # Get the handle of the foreground window
     window = win32gui.GetForegroundWindow()
