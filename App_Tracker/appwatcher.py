@@ -33,9 +33,13 @@ if __name__ == "__main__":
     while workApp:
         app_info = get_active_window()
         print(f"App: {app_info['process']}, Title: {app_info['title']}")
-        if app_info['process'].lower() == 'notepad.exe':
-            workApp = False
-            print("no no app")
+        currentApp = app_info['process']
+        match currentApp:
+            case "steamwebhelper.exe" | "Minecraft.exe":
+                print("no no app")
+                workApp = False
+            case _:
+                pass
         time.sleep(5)  # Check every 5 seconds
 
     # Send signal that an blacklisted app was detected
