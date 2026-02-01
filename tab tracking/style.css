@@ -23,3 +23,10 @@ body {
 .input-container {
     margin-bottom: 15px;
 }
+
+.timer {
+    text-align: center;
+    font-size: 16px;
+    color: blue;
+    margin-bottom: 10px;
+}
