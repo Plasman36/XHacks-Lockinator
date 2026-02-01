@@ -1,5 +1,2 @@
-list of no no apps
-
-1. steamwebhelper
-2. instagram
-3. minecraft
+steamwebhelper
+Minecraft
