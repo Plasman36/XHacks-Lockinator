@@ -9,6 +9,7 @@ import mediapipe as mp # MediaPipe: pre-built face and head detection
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 import time # Built in Python: for measuring "distraction" duration
+import serial
 
 # ---------- FACE DETECTION SETUP ----------
 BaseOptions = mp.tasks.BaseOptions
@@ -16,7 +17,9 @@ FaceDetector = mp.tasks.vision.FaceDetector
 FaceDetectorOptions = mp.tasks.vision.FaceDetectorOptions
 VisionRunningMode = mp.tasks.vision.RunningMode
 
-model_path = "models/blaze_face_short_range.tflite"
+arduino = serial.Serial('COM7', 9600)
+last_state = None
+model_path = r"c:\Projects\Programming\Hackathons\XHacks\eye_tracking\models\blaze_face_short_range.tflite"
 
 latest_detections = []
 def handle_result(result, output_image, timestamp_ms):
@@ -33,7 +36,7 @@ options = FaceDetectorOptions(
 face_detector = FaceDetector.create_from_options(options) # detector instance
 
 # ---------- WEBCAM SETUP ----------
-cap = cv2.VideoCapture(1) # open webcam, laptop webcam index is 1, not 0
+cap = cv2.VideoCapture(0) # open webcam, laptop webcam index is 1, not 0
 if not cap.isOpened():
     print("error: cannot open webcam")
     exit()
@@ -61,8 +64,15 @@ while True:
 
     if latest_detections:
         print("Face detected")
+        state = "0\n"  # torture OFF
     else:
         print("No face detected")
+        state = "1\n"  # torture ON
+
+    # Send ONLY if there's a change
+    if state != last_state:
+        arduino.write(state.encode())
+        last_state = state
 
     cv2.imshow("test window", frame) # display frames
 
