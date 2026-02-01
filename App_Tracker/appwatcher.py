@@ -2,6 +2,11 @@ import win32gui
 import win32process
 import psutil
 import time
+import os
+import serial
+
+arduino = serial.Serial('COM7', 9600)
+last_state = None
 
 # Code from Claude.ai
 def get_active_window():
@@ -28,28 +33,33 @@ def get_active_window():
     }
 
 def load_blacklist(filename="blacklist.txt"):
-    #Load blacklisted apps from file and add .exe extension
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # directory of the script
+    file_path = os.path.join(script_dir, filename)
     try:
-        with open(filename, 'r') as f:
-            # Read lines, strip whitespace, add .exe, ignore empty lines
+        with open(file_path, 'r') as f:
             apps = [line.strip() for line in f if line.strip()]
         return apps
     except FileNotFoundError:
-        print(f"Warning: {filename} not found. Using empty blacklist.")
+        print(f"Warning: {file_path} not found. Using empty blacklist.")
         return []
 
 if __name__ == "__main__":
     
-    workApp = True
-    while workApp:
+    while True:
         blacklist = load_blacklist()
         app_info = get_active_window()
         print(f"App: {app_info['process']}, Title: {app_info['title']}")
         currentApp = app_info['title']
         if currentApp in blacklist:
             print("Bad app detected!")
-            workApp = False
+            state = "1\n"  # torture ON
+        else:
+            state = "0\n"  # torture OFF
 
-        time.sleep(5)  # Check every 5 seconds
+        if state != last_state:
+            arduino.write(state.encode())
+            last_state = state
+        
+        time.sleep(1)
 
     # Send signal that an blacklisted app was detected

@@ -27,7 +27,7 @@ void loop() {
 
   if(torture){
     torture = false;
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 18; i++){
     servo1.write(90);
     delay(100);
     servo1.write(120);
@@ -35,7 +35,7 @@ void loop() {
     }
     servo1.write(90);
     delay(1000);
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 18; i++){
       servo2.write(90);
       delay(100);
       servo2.write(60);
