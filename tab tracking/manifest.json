@@ -1,8 +1,8 @@
 {
-    "control_version": 3,
+    "manifest_version": 3,
     "name": "Lockinator", 
     "version": "1.0", 
-    "description": "Alerts when blaclisted tabs are open and logs tabs.",
+    "description": "Alerts when blacklisted tabs are open and logs tabs.",
     "permissions": [
         "tabs",
         "storage",
@@ -14,7 +14,10 @@
     "action": {
         "default_popup": "popup.html",
         "default_icon": {
-            "16": "icon.png"
+            "16": "icon.png",
+            "32": "icon.png",
+            "48": "icon.png",
+            "128": "icon.png"
         }
     }
 }
