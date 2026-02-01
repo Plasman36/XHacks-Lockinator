@@ -48,6 +48,9 @@ function update() {
                     }
                 }, 1000);
 
+                // Send message to content script to start in-page timer
+                chrome.tabs.sendMessage(tab.id, { action: "startTimer" });
+
                 // Notification
                 chrome.notifications.create({
                     type: "basic",
