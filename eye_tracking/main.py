@@ -84,7 +84,7 @@ cap.release() # close webcam
 cv2.destroyAllWindows() # close display window
 face_detector.close()
 
-# ---------- REFERENCES ---------- 
+# --- REFERENCES ---------- 
 # (in order of usage)
 #
 # basic cv2 syntax at vid start: https://www.youtube.com/watch?v=kbdbZFT9NQI
